@@ -1733,6 +1733,7 @@ body::before {
   border-radius: 4px;
   transition: border-color 0.3s;
   -webkit-appearance: none;
+  appearance: none;
 }
 
 .form-group select {
@@ -1912,7 +1913,6 @@ footer {
   margin-right: auto;
 }
 
-.footer-brand {}
 
 .footer-logo {
   font-family: 'Syne', sans-serif;
