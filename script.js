@@ -133,3 +133,71 @@ window.toggleMobile = toggleMobile;
 window.toggleCategory = toggleCategory;
 window.scrollToService = scrollToService;
 window.submitForm = submitForm;
+
+// ─── PROFESSIONAL MICRO-INTERACTIONS ───
+document.addEventListener('DOMContentLoaded', () => {
+  // 1. Scroll Reading Progress Bar
+  const progressBar = document.createElement('div');
+  progressBar.id = 'scrollProgressBar';
+  document.body.appendChild(progressBar);
+
+  // 2. Back to Top Button
+  const backToTopBtn = document.createElement('button');
+  backToTopBtn.id = 'backToTopBtn';
+  backToTopBtn.innerHTML = '↑';
+  backToTopBtn.setAttribute('aria-label', 'Back to top');
+  document.body.appendChild(backToTopBtn);
+
+  backToTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  });
+
+  // Scroll Event Listener for Progress & Back To Top
+  window.addEventListener('scroll', () => {
+    const scrollPx = document.documentElement.scrollTop || document.body.scrollTop;
+    const winHeightPx = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    let scrolled = 0;
+    if (winHeightPx > 0) {
+      scrolled = (scrollPx / winHeightPx) * 100;
+    }
+    progressBar.style.width = scrolled + "%";
+
+    if (scrollPx > 400) {
+      backToTopBtn.classList.add('show');
+    } else {
+      backToTopBtn.classList.remove('show');
+    }
+  }, { passive: true });
+
+  // 3. Scroll Reveal Animations (Progressively Enhanced)
+  // Determine which structural elements should animate in
+  const elementsToReveal = document.querySelectorAll('section, .service-card, .process-step, .pillar-card, .about-story-content, .contact-card');
+  elementsToReveal.forEach(el => el.classList.add('reveal-hidden'));
+
+  const revealElements = document.querySelectorAll('.reveal-hidden');
+  
+  if ('IntersectionObserver' in window) {
+    const revealObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal-show');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      root: null,
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px"
+    });
+
+    revealElements.forEach(el => {
+      revealObserver.observe(el);
+    });
+  } else {
+    // Fallback
+    revealElements.forEach(el => el.classList.add('reveal-show'));
+  }
+});
