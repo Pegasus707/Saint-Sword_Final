@@ -127,3 +127,9 @@ window.addEventListener('scroll', () => {
     nav.style.background = 'rgba(10,10,18,0.85)';
   }
 });
+
+// Expose functions to global scope for inline HTML handlers
+window.toggleMobile = toggleMobile;
+window.toggleCategory = toggleCategory;
+window.scrollToService = scrollToService;
+window.submitForm = submitForm;
