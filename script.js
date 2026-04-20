@@ -127,3 +127,43 @@ window.addEventListener('scroll', () => {
     nav.style.background = 'rgba(10,10,18,0.85)';
   }
 });
+
+// ─── CUSTOM CURSOR LOGIC ───
+document.addEventListener('DOMContentLoaded', () => {
+  // Disable on mobile/touch devices
+  if (window.innerWidth <= 768 || 'ontouchstart' in window) return;
+
+  const dot = document.createElement('div');
+  dot.classList.add('custom-cursor-dot');
+  document.body.appendChild(dot);
+
+  const outline = document.createElement('div');
+  outline.classList.add('custom-cursor-outline');
+  document.body.appendChild(outline);
+
+  let mouseX = 0, mouseY = 0;
+  let outlineX = 0, outlineY = 0;
+
+  window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      // Dot tracks immediately
+      dot.style.transform = `translate3d(calc(${mouseX}px - 50%), calc(${mouseY}px - 50%), 0)`;
+  });
+
+  // Smooth trailing animation for the outline
+  function animate() {
+      outlineX += (mouseX - outlineX) * 0.15;
+      outlineY += (mouseY - outlineY) * 0.15;
+      outline.style.transform = `translate3d(calc(${outlineX}px - 50%), calc(${outlineY}px - 50%), 0)`;
+      requestAnimationFrame(animate);
+  }
+  animate();
+
+  // Expand outline on hover elements
+  const interactables = document.querySelectorAll('a, button, input, textarea, select, .hamburger, .source-card, .pillar-card');
+  interactables.forEach(el => {
+      el.addEventListener('mouseenter', () => outline.classList.add('hover-active'));
+      el.addEventListener('mouseleave', () => outline.classList.remove('hover-active'));
+  });
+});
